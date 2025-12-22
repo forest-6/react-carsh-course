@@ -6,12 +6,15 @@ import classes from "./PostsList.module.css";
 
 function PostList({ onStopPosting, modalIsVisible }) {
   const [posts, setPosts] = useState([]);
+  const [isFetching, setIsFetching] = useState(false);
 
   useEffect(() => {
     async function fetchPosts() {
+      setIsFetching(true);
       const response = await fetch("http://localhost:8080/posts");
       const data = await response.json();
       setPosts(data.posts);
+      setIsFetching(false);
     }
     fetchPosts();
   }, []);
@@ -35,14 +38,20 @@ function PostList({ onStopPosting, modalIsVisible }) {
         </Modal>
       )}
       <ul className={classes.posts}>
-        {posts.length > 0 &&
+        {!isFetching &&
+          posts.length > 0 &&
           posts.map((post) => (
             <Post key={post.id} author={post.author} body={post.body} />
           ))}
-        {posts.length === 0 && (
+        {!isFetching && posts.length === 0 && (
           <div style={{ textAlign: "center", color: "white" }}>
             <h2>No posts yet</h2>
             <p>Start adding some!</p>
+          </div>
+        )}
+        {isFetching && (
+          <div style={{ textAlign: "center", color: "white" }}>
+            <p>Loading...</p>
           </div>
         )}
       </ul>
