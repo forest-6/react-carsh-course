@@ -1,11 +1,21 @@
+import { useState, useEffect } from "react";
 import Post from "./Post";
 import NewPost from "./NewPost";
 import Modal from "./Modal";
 import classes from "./PostsList.module.css";
-import { useState } from "react";
 
 function PostList({ onStopPosting, modalIsVisible }) {
   const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      const response = await fetch("http://localhost:8080/posts");
+      const data = await response.json();
+      setPosts(data.posts);
+    }
+    fetchPosts();
+  }, []);
+
   function addPostHandler(postData) {
     fetch("http://localhost:8080/posts", {
       method: "POST",
@@ -27,7 +37,7 @@ function PostList({ onStopPosting, modalIsVisible }) {
       <ul className={classes.posts}>
         {posts.length > 0 &&
           posts.map((post) => (
-            <Post key={post.body} author={post.author} body={post.body} />
+            <Post key={post.id} author={post.author} body={post.body} />
           ))}
         {posts.length === 0 && (
           <div style={{ textAlign: "center", color: "white" }}>
