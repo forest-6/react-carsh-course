@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import classes from "./NewPost.module.css";
 import Modal from "../components/Modal.jsx";
 
-function NewPost({ onCancel, onAddPost }) {
+function NewPost({ onAddPost }) {
   const [enteredBody, setEnteredBody] = useState("");
   const [enteredAuthor, setEnteredAuthor] = useState("");
+  const navigate = useNavigate();
 
   function bodyChangeHandler(event) {
     setEnteredBody(event.target.value);
@@ -19,7 +21,7 @@ function NewPost({ onCancel, onAddPost }) {
       author: enteredAuthor,
     };
     onAddPost(postData);
-    onCancel();
+    navigate("/");
   }
 
   return (
@@ -39,9 +41,9 @@ function NewPost({ onCancel, onAddPost }) {
           />
         </p>
         <p className={classes.actions}>
-          <button type="button" onClick={onCancel}>
+          <Link to="/" type="button">
             Cancel
-          </button>
+          </Link>
           <button type="submit">Submit</button>
         </p>
       </form>
