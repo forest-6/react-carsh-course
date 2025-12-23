@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import Post from "./Post";
-import NewPost from "./NewPost";
-import Modal from "./Modal";
 import classes from "./PostsList.module.css";
 
-function PostList({ onStopPosting, modalIsVisible }) {
+function PostList() {
   const [posts, setPosts] = useState([]);
   const [isFetching, setIsFetching] = useState(false);
 
@@ -31,31 +29,24 @@ function PostList({ onStopPosting, modalIsVisible }) {
   }
 
   return (
-    <>
-      {modalIsVisible && (
-        <Modal close={onStopPosting}>
-          <NewPost onCancel={onStopPosting} onAddPost={addPostHandler} />
-        </Modal>
+    <ul className={classes.posts}>
+      {!isFetching &&
+        posts.length > 0 &&
+        posts.map((post) => (
+          <Post key={post.id} author={post.author} body={post.body} />
+        ))}
+      {!isFetching && posts.length === 0 && (
+        <div style={{ textAlign: "center", color: "white" }}>
+          <h2>No posts yet</h2>
+          <p>Start adding some!</p>
+        </div>
       )}
-      <ul className={classes.posts}>
-        {!isFetching &&
-          posts.length > 0 &&
-          posts.map((post) => (
-            <Post key={post.id} author={post.author} body={post.body} />
-          ))}
-        {!isFetching && posts.length === 0 && (
-          <div style={{ textAlign: "center", color: "white" }}>
-            <h2>No posts yet</h2>
-            <p>Start adding some!</p>
-          </div>
-        )}
-        {isFetching && (
-          <div style={{ textAlign: "center", color: "white" }}>
-            <p>Loading...</p>
-          </div>
-        )}
-      </ul>
-    </>
+      {isFetching && (
+        <div style={{ textAlign: "center", color: "white" }}>
+          <p>Loading...</p>
+        </div>
+      )}
+    </ul>
   );
 }
 
