@@ -9,7 +9,12 @@ function PostList() {
     <ul className={classes.posts}>
       {posts.length > 0 &&
         posts.map((post) => (
-          <Post key={post.id} author={post.author} body={post.body} />
+          <Post
+            key={post.id}
+            id={post.id}
+            author={post.author}
+            body={post.body}
+          />
         ))}
       {posts.length === 0 && (
         <div style={{ textAlign: "center", color: "white" }}>
